@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="hu">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sonora</title>
+  </head>
+  <body>
+    <header class="toolbar">
+      <strong class="brand">Sonora</strong>
+
+      <label class="button">
+        Kotta megnyitása
+        <input type="file" id="file" accept=".musicxml,.xml,.mxl" hidden />
+      </label>
+      <button type="button" id="sample">Minta kotta</button>
+
+      <div class="group" role="group" aria-label="Nézet">
+        <button type="button" data-mode="black">Fekete</button>
+        <button type="button" data-mode="color">Színes</button>
+        <button type="button" data-mode="empty">Kifestős</button>
+      </div>
+      <label class="check"><input type="checkbox" id="outline" checked /> Körvonal</label>
+
+      <div class="group" role="group" aria-label="Transzponálás">
+        <button type="button" id="down" title="Lejjebb">▼</button>
+        <select id="step" aria-label="Lépésköz">
+          <option value="1">félhang</option>
+          <option value="2">egész hang</option>
+          <option value="3">kis terc</option>
+          <option value="4">nagy terc</option>
+          <option value="5">kvart</option>
+          <option value="7">kvint</option>
+          <option value="12">oktáv</option>
+        </select>
+        <button type="button" id="up" title="Feljebb">▲</button>
+        <button type="button" id="reset" title="Vissza az eredetire">Eredeti</button>
+      </div>
+      <span id="transpose-label" class="muted"></span>
+
+      <button type="button" id="print">Nyomtatás / PDF</button>
+    </header>
+
+    <p id="status" role="status">Kottamotor betöltése…</p>
+    <main id="pages"></main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

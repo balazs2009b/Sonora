@@ -1,6 +1,6 @@
 # Sonora – specifikáció és döntésnapló
 
-> Állapot: **tervezés.** A kódolás csak akkor indul, ha a tulajdonos kiírja: **„elkezdheted a kódolást”**.
+> Állapot: **1. fázis (színező) – első működő verzió kész.** A kódolást a tulajdonos engedélyezte.
 
 ## Cél
 Saját használatú kottaprogram (később akár Play Áruház). Fekete kotta → egy gombnyomással színes vagy üres (kifestős) kotta, transzponálás, nyomtatás. Meglévő (Finale) kották színessé tétele.
@@ -14,7 +14,8 @@ Saját használatú kottaprogram (később akár Play Áruház). Fekete kotta �
 - Később ugyanaz a kód Android-appá csomagolható (pl. Capacitor / TWA).
   - Play Áruház: 25 USD egyszeri díj, új magánfióknál zárt teszt (12 tesztelő, 14 nap).
   - Androidon az érintéses kezelést át kell majd tervezni.
-- Kottarajzolás kész nyílt forrású motorral (pl. Verovio / VexFlow / OpenSheetMusicDisplay) – nem nulláról.
+- Kottarajzolás: **Verovio** (nyílt forrású, WebAssembly, internet nélkül fut). Nyelv: TypeScript + Vite, keretrendszer nélkül.
+- A kész program **egyetlen `index.html`** (`npm run build` → `dist/index.html`), dupla kattintással megnyitható.
 - Fájlformátum: **MusicXML** (import + export). Ez a Finale-kapcsolat is.
 
 ## Színrendszer (a termék lényege)
@@ -30,7 +31,7 @@ Színezés mindig a **megszólaló hang** szerint (transzponáló hangszernél i
 | A | narancs |
 | H | citromsárga |
 
-- **Köztes hangok** (Cisz/Desz, Disz/Esz, Fisz/Gesz, Gisz/Asz, B/Aisz): kettéosztott kottafej, **átlós választóvonal bal lentről jobb fentre**. **Bal lent az alsó hang színe, jobb fent a felső hangé** (pl. Cisz: bal lent fekete, jobb fent barna). Enharmonikus párok (Cisz = Desz) ugyanúgy néznek ki.
+- **Köztes hangok** (Cisz/Desz, Disz/Esz, Fisz/Gesz, Gisz/Asz, B/Aisz): kettéosztott kottafej, **átlós választóvonal bal lentről jobb fentre**. **A vonal fölötti (bal felső) fél a felső hang, a vonal alatti (jobb alsó) fél az alsó hang színe** (pl. Cisz: fent barna, lent fekete). *(Javítva: korábban tévesen „bal lent / jobb fent” szerepelt, de azok a sarkok magán a vonalon vannak.)* Enharmonikus párok (Cisz = Desz) ugyanúgy néznek ki.
 - Csak a **kottafej** színes.
 - Javaslat (még nem jóváhagyott): vékony sötét körvonal minden színes fejen (a citromsárga fehér papíron alig látszik).
 
@@ -60,8 +61,16 @@ Színezés mindig a **megszólaló hang** szerint (transzponáló hangszernél i
 3. **Android** csomagolás
 4. *(talán)* OMR – PDF/PNG beolvasás
 
-## Nyitott kérdések (szerdára)
+## Elkészült (1. fázis)
+- [x] MusicXML megnyitás (`.musicxml`, `.xml`, `.mxl`), minta kotta
+- [x] Fekete / színes / kifestős nézet, körvonal kapcsoló
+- [x] Színezés a megszólaló hang szerint (transzponáló hangszernél is)
+- [x] Transzponálás félhang … oktáv lépésekkel, ±1 oktávig
+- [x] Nyomtatás / PDF (A4, színhelyesen)
+
+## Nyitott kérdések
 - [ ] Fotó: színes kotta és kifestős házi minta a tanártól
 - [ ] Finale-fájlok kiterjesztése (`.musx` / `.mus` / `.pdf`)? Megvan-e még a Finale (MusicXML export)?
-- [ ] Tanár véleménye: kifestős mód – negyed vs. fél hang megkülönböztetése
+- [ ] Tanár véleménye: kifestős mód – negyed vs. fél hang megkülönböztetése. **A jelenlegi megvalósításban a negyed üres feje tényleg félhangnak tűnik – dönteni kell.**
+- [ ] Az átlós felezés színkiosztása (fent felső hang, lent alsó hang) jó-e így?
 - [ ] Színes fejek körvonala – kell-e?
