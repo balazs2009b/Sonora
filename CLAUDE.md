@@ -17,4 +17,8 @@ Olvasd el a `SPEC.md`-t minden munka előtt – ott vannak a döntések és a ny
 - `src/score.ts` – Verovio: betöltés, transzponálás, megszólaló hangok, SVG oldalak
 - `src/noteheads.ts` – kottafejek átszínezése (fekete / színes / kifestős)
 - `src/main.ts` – felhasználói felület
+- `public/` – PWA: `sw.js` (offline + frissítés), manifest, ikonok
 - `samples/` – próba kották
+
+## Hosting
+Vercel (ANAKRON team). A `main` ág az éles verzió, a PR-ágak előnézeti címet kapnak.

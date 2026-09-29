@@ -16,6 +16,7 @@ Saját használatú kottaprogram (később akár Play Áruház). Fekete kotta �
   - Androidon az érintéses kezelést át kell majd tervezni.
 - Kottarajzolás: **Verovio** (nyílt forrású, WebAssembly, internet nélkül fut). Nyelv: TypeScript + Vite, keretrendszer nélkül.
 - A kész program **egyetlen `index.html`** (`npm run build` → `dist/index.html`), dupla kattintással megnyitható.
+- **Hosting: Vercel** (ANAKRON team), a `main` ág minden pushra automatikusan élesedik. **PWA**: telepíthető; online mindig a legfrissebb verziót tölti le, offline a legutóbb letöltöttel indul (`public/sw.js`).
 - Fájlformátum: **MusicXML** (import + export). Ez a Finale-kapcsolat is.
 
 ## Színrendszer (a termék lényege)
@@ -67,6 +68,7 @@ Színezés mindig a **megszólaló hang** szerint (transzponáló hangszernél i
 - [x] Színezés a megszólaló hang szerint (transzponáló hangszernél is)
 - [x] Transzponálás félhang … oktáv lépésekkel, ±1 oktávig
 - [x] Nyomtatás / PDF (A4, színhelyesen)
+- [x] Online hosting + telepíthető offline app (PWA), automatikus frissítéssel
 
 ## Nyitott kérdések
 - [ ] Fotó: színes kotta és kifestős házi minta a tanártól

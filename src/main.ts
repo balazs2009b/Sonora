@@ -106,4 +106,10 @@ async function main(): Promise<void> {
   byId('print').addEventListener('click', () => window.print());
 }
 
+// Webről megnyitva: telepíthető app, ami internet nélkül is indul.
+// Fájlból (file://) megnyitva nincs rá szükség – és a böngésző nem is engedi.
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('./sw.js').catch((err) => console.warn('Service worker hiba:', err));
+}
+
 main().catch((err) => setStatus(`Hiba indításkor: ${err instanceof Error ? err.message : err}`, true));
