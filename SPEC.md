@@ -16,7 +16,7 @@ Saját használatú kottaprogram (később akár Play Áruház). Fekete kotta �
   - Androidon az érintéses kezelést át kell majd tervezni.
 - Kottarajzolás: **Verovio** (nyílt forrású, WebAssembly, internet nélkül fut). Nyelv: TypeScript + Vite, keretrendszer nélkül.
 - A kész program **egyetlen `index.html`** (`npm run build` → `dist/index.html`), dupla kattintással megnyitható.
-- **Hosting: Vercel** (ANAKRON team), a `main` ág minden pushra automatikusan élesedik. **PWA**: telepíthető; online mindig a legfrissebb verziót tölti le, offline a legutóbb letöltöttel indul (`public/sw.js`).
+- **Hosting: GitHub Pages** – https://balazs2009b.github.io/Sonora/ – a `main` ág minden pushra automatikusan élesedik (`.github/workflows/pages.yml`). (A Vercel-csatlakozó 403-mal elutasította a projekt létrehozását.) **PWA**: telepíthető; online mindig a legfrissebb verziót tölti le, offline a legutóbb letöltöttel indul (`public/sw.js`).
 - Fájlformátum: **MusicXML** (import + export). Ez a Finale-kapcsolat is.
 
 ## Színrendszer (a termék lényege)

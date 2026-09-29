@@ -3,7 +3,7 @@
 Színes kotta egy gombnyomással. MusicXML kottát nyit meg, és fekete, színes vagy kifestős nézetben mutatja. Transzponál, nyomtat, internet nélkül fut.
 
 ## Használat
-**Online:** a Vercelen hostolt címen. Chrome/Edge címsorában a „Telepítés” ikonnal appként telepíthető. Utána internet nélkül is indul, és ha van net, mindig frissül.
+**Online:** https://balazs2009b.github.io/Sonora/ . Chrome/Edge címsorában a „Telepítés” ikonnal appként telepíthető. Utána internet nélkül is indul, és ha van net, mindig frissül.
 
 **Fájlként (fejlesztőknek):**
 1. `npm install`

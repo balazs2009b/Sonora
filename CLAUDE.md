@@ -21,4 +21,4 @@ Olvasd el a `SPEC.md`-t minden munka előtt – ott vannak a döntések és a ny
 - `samples/` – próba kották
 
 ## Hosting
-Vercel (ANAKRON team). A `main` ág az éles verzió, a PR-ágak előnézeti címet kapnak.
+GitHub Pages: https://balazs2009b.github.io/Sonora/ – a `main` ágról automatikusan (`.github/workflows/pages.yml`). PR-eken csak teszt + build fut.
