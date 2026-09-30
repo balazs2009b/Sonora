@@ -13,6 +13,9 @@ Olvasd el a `SPEC.md`-t minden munka előtt – ott vannak a döntések és a ny
 - `npm run build` – típusellenőrzés + egyetlen offline `dist/index.html`
 
 ## Felépítés
+- `src/model.ts` – a kotta adatmodellje, hangértékek, ütemekre bontás
+- `src/musicxml.ts` – MusicXML írás és olvasás (a Finale felé is ez a közös nyelv)
+- `src/editor.ts` – szerkesztés: kurzor, beírás, törlés, undo/redo (DOM nélkül, ezért jól tesztelhető)
 - `src/colors.ts` – színrendszer (hangmagasság → szín)
 - `src/score.ts` – Verovio: betöltés, transzponálás, megszólaló hangok, SVG oldalak
 - `src/noteheads.ts` – kottafejek átszínezése (fekete / színes / kifestős)
