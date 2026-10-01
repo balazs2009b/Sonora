@@ -1,6 +1,6 @@
 # Sonora – specifikáció és döntésnapló
 
-> Állapot: **1. fázis (színező) – első működő verzió kész.** A kódolást a tulajdonos engedélyezte.
+> Állapot: **2a fázis (szerkesztő alapok) kész.** Kottát írni, menteni és megnyitni lehet.
 
 ## Cél
 Saját használatú kottaprogram (később akár Play Áruház). Fekete kotta → egy gombnyomással színes vagy üres (kifestős) kotta, transzponálás, nyomtatás. Meglévő (Finale) kották színessé tétele.
@@ -57,8 +57,12 @@ Színezés mindig a **megszólaló hang** szerint (transzponáló hangszernél i
 - Kottabeolvasás PDF/PNG-ből (OMR) – **későbbi, bizonytalan fázis**
 
 ## Fázisok
-1. **Színező:** MusicXML betöltés → fekete/színes/üres nézet → transzponálás → nyomtatás/PDF
-2. **Szerkesztő:** kottaírás, sorok hozzáadása, undo/redo, teljes jelkészlet
+1. ✅ **Színező:** MusicXML betöltés → fekete/színes/üres nézet → transzponálás → nyomtatás/PDF
+2. **Szerkesztő:**
+   - ✅ **2a** – új kotta, hang/szünet beírása és törlése, hangértékek, pont, #/b/feloldójel, oktáv, kulcs, hangnem, ütemmutató, tempó, sorok, undo/redo, MusicXML mentés és megnyitás
+   - **2b** – ütemvonalak, ismétlőjel, záróvonal, kulcs- és hangnemváltás a darab közben, oldalváltás
+   - **2c** – kötőív, átkötés, dinamika, korona, ékezet, staccato, coda/segno
+   - **2d** – akkordok, több szólam egy soron
 3. **Android** csomagolás
 4. *(talán)* OMR – PDF/PNG beolvasás
 
@@ -69,6 +73,22 @@ Színezés mindig a **megszólaló hang** szerint (transzponáló hangszernél i
 - [x] Transzponálás félhang … oktáv lépésekkel, ±1 oktávig
 - [x] Nyomtatás / PDF (A4, színhelyesen)
 - [x] Online hosting + telepíthető offline app (PWA), automatikus frissítéssel
+
+## Elkészült (2a fázis)
+- [x] Adatmodell (`src/model.ts`) és MusicXML írás/olvasás (`src/musicxml.ts`) – a kotta ebből készül
+- [x] Hang és szünet beírása billentyűzetről (C D E F G A H, B = bé) és gombokkal
+- [x] Hangértékek (egész…tizenhatod), 1–2 pont, #/b/feloldójel, oktáv 1–7
+- [x] Kurzor, mozgás, törlés, korlátlan undo/redo
+- [x] Cím, hangnem, ütemmutató, tempó, kulcs (violin/basszus/alt/tenor), sor neve
+- [x] Sor beszúrása a végére vagy a kurzor helyére, sor törlése
+- [x] Mentés MusicXML-be és megnyitás
+
+## Ismert korlátok (2a)
+- A transzponálás **csak a képernyőn és nyomtatásban** hat; a mentett fájl az eredeti hangnemben marad.
+- Ütemvonalon átnyúló hang nincs: ha egy hang nem fér be, új ütemet kezd, az előző ütem rövidebb marad (átkötés = 2c).
+- A `.mxl` (tömörített) fájlt a szerkesztő nem nyitja meg, csak a sima `.musicxml`-t.
+- Beolvasáskor az akkordok további hangjai és az 1-től eltérő szólamok kimaradnak.
+- Egy sorban egy szólam, akkord nélkül (2d).
 
 ## Nyitott kérdések
 - [ ] Fotó: színes kotta és kifestős házi minta a tanártól

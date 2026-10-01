@@ -13,11 +13,15 @@
     <header class="toolbar">
       <strong class="brand">Sonora</strong>
 
-      <label class="button">
-        Kotta megnyitása
-        <input type="file" id="file" accept=".musicxml,.xml,.mxl" hidden />
-      </label>
-      <button type="button" id="sample">Minta kotta</button>
+      <div class="group">
+        <button type="button" id="new">Új kotta</button>
+        <label class="button">
+          Megnyitás
+          <input type="file" id="file" accept=".musicxml,.xml,.mxl" hidden />
+        </label>
+        <button type="button" id="save">Mentés</button>
+        <button type="button" id="print">Nyomtatás</button>
+      </div>
 
       <div class="group" role="group" aria-label="Nézet">
         <button type="button" data-mode="black">Fekete</button>
@@ -38,15 +42,93 @@
           <option value="12">oktáv</option>
         </select>
         <button type="button" id="up" title="Feljebb">▲</button>
-        <button type="button" id="reset" title="Vissza az eredetire">Eredeti</button>
+        <button type="button" id="reset">Eredeti</button>
+        <span id="transpose-label" class="muted"></span>
       </div>
-      <span id="transpose-label" class="muted"></span>
-
-      <button type="button" id="print">Nyomtatás / PDF</button>
     </header>
 
-    <p id="status" role="status">Kottamotor betöltése…</p>
-    <main id="pages"></main>
+    <div class="layout">
+      <aside class="panel">
+        <section>
+          <h2>Kotta</h2>
+          <label>Cím <input type="text" id="title" /></label>
+          <div class="row">
+            <label>Ütem
+              <span class="inline">
+                <input type="number" id="beats" min="1" max="16" step="1" />
+                <span>/</span>
+                <select id="beat-type">
+                  <option value="2">2</option>
+                  <option value="4">4</option>
+                  <option value="8">8</option>
+                </select>
+              </span>
+            </label>
+            <label>Tempó <input type="number" id="tempo" min="20" max="300" step="1" /></label>
+          </div>
+          <label>Hangnem <select id="fifths"></select></label>
+        </section>
+
+        <section>
+          <h2>Sorok</h2>
+          <ul id="staff-list" class="staff-list"></ul>
+          <div class="row">
+            <button type="button" id="add-staff">+ Sor a végére</button>
+            <button type="button" id="insert-staff">+ Sor ide</button>
+            <button type="button" id="remove-staff">− Sor törlése</button>
+          </div>
+          <label>Kulcs <select id="clef"></select></label>
+          <label>Sor neve <input type="text" id="staff-name" /></label>
+        </section>
+
+        <section>
+          <h2>Beírás</h2>
+          <div class="group wrap" role="group" aria-label="Hangérték">
+            <button type="button" data-duration="whole" title="Egész (1)">𝅝</button>
+            <button type="button" data-duration="half" title="Fél (2)">𝅗𝅥</button>
+            <button type="button" data-duration="quarter" title="Negyed (3)">𝅘𝅥</button>
+            <button type="button" data-duration="eighth" title="Nyolcad (4)">𝅘𝅥𝅮</button>
+            <button type="button" data-duration="16th" title="Tizenhatod (5)">𝅘𝅥𝅯</button>
+            <button type="button" id="dots" title="Pont (.)">•</button>
+          </div>
+          <div class="group wrap" role="group" aria-label="Módosítójel">
+            <button type="button" data-alter="1" title="Kereszt (+)">♯</button>
+            <button type="button" data-alter="0" title="Feloldójel (0)">♮</button>
+            <button type="button" data-alter="-1" title="Bé (−)">♭</button>
+            <span class="inline">Oktáv
+              <button type="button" id="octave-down" title="Lejjebb (↓)">−</button>
+              <output id="octave">4</output>
+              <button type="button" id="octave-up" title="Feljebb (↑)">+</button>
+            </span>
+          </div>
+          <div class="group wrap notes" role="group" aria-label="Hangok">
+            <button type="button" data-note="C">C</button>
+            <button type="button" data-note="D">D</button>
+            <button type="button" data-note="E">E</button>
+            <button type="button" data-note="F">F</button>
+            <button type="button" data-note="G">G</button>
+            <button type="button" data-note="A">A</button>
+            <button type="button" data-note="B">H</button>
+            <button type="button" id="rest" title="Szünet (S)">Szünet</button>
+          </div>
+          <div class="group wrap">
+            <button type="button" id="delete" title="Törlés (Backspace)">⌫ Törlés</button>
+            <button type="button" id="undo" title="Visszavonás (Ctrl+Z)">↶ Vissza</button>
+            <button type="button" id="redo" title="Újra (Ctrl+Y)">↷ Újra</button>
+          </div>
+          <p class="hint">
+            Billentyűk: <b>C D E F G A H</b> hang, <b>B</b> = bé, <b>1–5</b> hangérték, <b>.</b> pont,
+            <b>+ − 0</b> módosítójel, <b>↑↓</b> oktáv, <b>S</b> szünet, <b>← →</b> kurzor,
+            <b>Backspace</b> törlés, <b>Ctrl+Z</b> vissza.
+          </p>
+        </section>
+      </aside>
+
+      <main>
+        <p id="status" role="status">Kottamotor betöltése…</p>
+        <div id="pages"></div>
+      </main>
+    </div>
 
     <script type="module" src="/src/main.ts"></script>
   </body>
