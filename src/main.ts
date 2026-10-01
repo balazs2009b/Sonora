@@ -1,7 +1,20 @@
 // A felhasználói felület: szerkesztés, nézetváltás, transzponálás, mentés, nyomtatás.
 import './style.css';
 import { Editor } from './editor';
-import { CLEF_NAMES, DURATIONS, emptyScore, type Clef, type Duration, type Step } from './model';
+import {
+  CLEF_NAMES,
+  DURATIONS,
+  emptyScore,
+  isTimed,
+  type Articulation,
+  type BarlineStyle,
+  type Clef,
+  type Duration,
+  type Dynamic,
+  type Marker,
+  type Step,
+  type Wedge,
+} from './model';
 import { eventId, fromMusicXml, toMusicXml } from './musicxml';
 import { intervalLabel, MAX_TRANSPOSE, ScoreEngine } from './score';
 import { applyView, installGradients, type ViewMode } from './noteheads';
@@ -37,9 +50,12 @@ function render(engine: ScoreEngine): void {
     pagesEl.innerHTML = result.pages.map((svg) => `<div class="page">${svg}</div>`).join('');
     restyle();
     drawCaret();
-    const { staff, index } = editor.cursor;
-    const total = editor.staff.events.length;
-    setStatus(`${editor.score.title} · ${staff + 1}. sor, ${index}/${total} hang · ${result.pages.length} oldal`);
+    const { staff, voice, index } = editor.cursor;
+    const total = editor.events.length;
+    const voiceLabel = editor.staff.voices.length > 1 ? `, ${voice + 1}. szólam` : '';
+    setStatus(
+      `${editor.score.title} · ${staff + 1}. sor${voiceLabel}, ${index}/${total} elem · ${result.pages.length} oldal`,
+    );
   } catch (err) {
     setStatus(err instanceof Error ? err.message : String(err), true);
   }
@@ -61,12 +77,18 @@ function restyle(): void {
  * így ugyanabban a koordinátarendszerben van, bármilyen nagyítás mellett.
  */
 function drawCaret(): void {
-  const { staff, index } = editor.cursor;
-  const events = editor.staff.events;
+  const { staff, voice, index } = editor.cursor;
+  const events = editor.events;
   if (events.length === 0) return;
 
-  const after = index === 0 ? false : true;
-  const target = pagesEl.querySelector<SVGGElement>(`#${CSS.escape(eventId(staff, after ? index - 1 : 0))}`);
+  // Ütemvonalnak és kulcsváltásnak nincs saját kottajele, ezért a legközelebbi hangot keressük.
+  const step = index === 0 ? 1 : -1;
+  let position = index === 0 ? 0 : index - 1;
+  while (position >= 0 && position < events.length && !isTimed(events[position])) position += step;
+  if (position < 0 || position >= events.length) return;
+
+  const after = index > 0;
+  const target = pagesEl.querySelector<SVGGElement>(`#${CSS.escape(eventId(staff, voice, position))}`);
   if (!target?.parentNode) return;
 
   const box = target.getBBox();
@@ -90,6 +112,7 @@ function syncPanel(): void {
   byId<HTMLSelectElement>('fifths').value = String(score.fifths);
   byId<HTMLSelectElement>('clef').value = editor.staff.clef;
   byId<HTMLInputElement>('staff-name').value = editor.staff.name;
+  byId<HTMLButtonElement>('remove-voice').disabled = editor.staff.voices.length < 2;
   byId('octave').textContent = String(input.octave);
   byId('dots').setAttribute('aria-pressed', String(input.dots > 0));
   byId('dots').textContent = input.dots === 2 ? '••' : '•';
@@ -103,6 +126,45 @@ function syncPanel(): void {
     button.setAttribute('aria-pressed', String(Number(button.dataset.alter) === input.alter));
   }
 
+  // A jelgombok azt mutatják, mi van a kurzor előtti hangon.
+  const current = editor.currentEvent();
+  const timed = current && isTimed(current) ? current : null;
+  const note = editor.currentNote();
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-articulation]')) {
+    const name = button.dataset.articulation as Articulation;
+    button.setAttribute('aria-pressed', String(timed?.articulations?.includes(name) ?? false));
+    button.disabled = !timed;
+  }
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-dynamic]')) {
+    button.setAttribute('aria-pressed', String(timed?.dynamic === button.dataset.dynamic));
+    button.disabled = !timed;
+  }
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-wedge]')) {
+    button.setAttribute('aria-pressed', String(timed?.wedge === button.dataset.wedge));
+    button.disabled = !timed;
+  }
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-marker]')) {
+    button.setAttribute('aria-pressed', String(timed?.marker === button.dataset.marker));
+    button.disabled = !timed;
+  }
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-slur]')) {
+    button.setAttribute('aria-pressed', String(note?.slur === button.dataset.slur));
+    button.disabled = !note;
+  }
+  const tieButton = byId<HTMLButtonElement>('tie');
+  tieButton.setAttribute('aria-pressed', String(note?.tie === 'start' || note?.tie === 'both'));
+  tieButton.disabled = !note;
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-chord]')) button.disabled = !note;
+  byId<HTMLButtonElement>('chord-remove').disabled = !note || note.pitches.length < 2;
+
+  byId('voice-list').innerHTML = editor.staff.voices
+    .map(
+      (_, index) =>
+        `<button type="button" data-voice="${index}" aria-pressed="${index === cursor.voice}">` +
+        `${index + 1}. szólam</button>`,
+    )
+    .join('');
+
   byId('staff-list').innerHTML = score.staves
     .map(
       (staff, index) =>
@@ -113,12 +175,17 @@ function syncPanel(): void {
 }
 
 function fillSelects(): void {
-  byId<HTMLSelectElement>('fifths').innerHTML = Object.entries(KEY_NAMES)
+  const keys = Object.entries(KEY_NAMES)
     .map(([value, name]) => `<option value="${value}">${name}</option>`)
     .join('');
-  byId<HTMLSelectElement>('clef').innerHTML = Object.entries(CLEF_NAMES)
+  const clefs = Object.entries(CLEF_NAMES)
     .map(([value, name]) => `<option value="${value}">${name}</option>`)
     .join('');
+  byId<HTMLSelectElement>('fifths').innerHTML = keys;
+  byId<HTMLSelectElement>('key-change').innerHTML = keys;
+  byId<HTMLSelectElement>('clef').innerHTML = clefs;
+  byId<HTMLSelectElement>('clef-change').innerHTML = clefs;
+  byId<HTMLSelectElement>('clef-change').value = 'F';
 }
 
 // --- Fájlkezelés -----------------------------------------------------------
@@ -326,6 +393,51 @@ async function main(): Promise<void> {
   on('delete', () => editor.deleteBefore());
   on('undo', () => editor.undo());
   on('redo', () => editor.redo());
+
+  byId('voice-list').addEventListener('click', (e) => {
+    const button = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-voice]');
+    if (!button) return;
+    editor.selectVoice(Number(button.dataset.voice));
+    redraw();
+  });
+  on('add-voice', () => editor.addVoice());
+  on('remove-voice', () => editor.removeVoice(editor.cursor.voice));
+
+  // Akkord
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-chord]')) {
+    button.addEventListener('click', () => {
+      editor.addChordTone(button.dataset.chord as Step);
+      redraw();
+    });
+  }
+  on('chord-remove', () => editor.removeChordTone());
+
+  // Előadási jelek
+  const bindMarks = <T extends string>(attribute: string, apply: (value: T) => void) => {
+    for (const button of document.querySelectorAll<HTMLButtonElement>(`[data-${attribute}]`)) {
+      button.addEventListener('click', () => {
+        apply(button.dataset[attribute] as T);
+        redraw();
+      });
+    }
+  };
+  bindMarks<Articulation>('articulation', (name) => editor.toggleArticulation(name));
+  bindMarks<Dynamic>('dynamic', (value) => editor.setDynamic(value));
+  bindMarks<Wedge>('wedge', (value) => editor.setWedge(value));
+  bindMarks<Marker>('marker', (value) => editor.setMarker(value));
+  bindMarks<'start' | 'stop'>('slur', (value) => editor.setSlur(value));
+  bindMarks<BarlineStyle>('barline', (style) => editor.insertBarline(style));
+  byId('tie').addEventListener('click', () => {
+    if (!editor.toggleTie()) {
+      setStatus('Átkötés csak két egyforma magasságú, egymás utáni hang közé tehető.', true);
+      return;
+    }
+    redraw();
+  });
+
+  // Kulcs- és hangnemváltás a darab közben
+  on('add-clef-change', () => editor.insertClefChange(byId<HTMLSelectElement>('clef-change').value as Clef));
+  on('add-key-change', () => editor.insertKeyChange(Number(byId<HTMLSelectElement>('key-change').value)));
 
   document.addEventListener('keydown', (e) => handleKey(e, engine));
 }
