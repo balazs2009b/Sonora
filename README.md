@@ -1,6 +1,6 @@
 # Sonora
 
-Színes kotta egy gombnyomással. Kottát írhatsz benne, vagy MusicXML kottát nyithatsz meg, és fekete, színes vagy kifestős nézetben mutatja. Transzponál, nyomtat, internet nélkül fut.
+Színes kotta egy gombnyomással. Kottát írhatsz benne akkordokkal, több szólammal és előadási jelekkel, vagy MusicXML kottát nyithatsz meg, és fekete, színes vagy kifestős nézetben mutatja. Transzponál, nyomtat, internet nélkül fut.
 
 ## Billentyűk
 | Billentyű | Mit csinál |

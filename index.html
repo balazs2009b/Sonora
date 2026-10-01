@@ -70,7 +70,7 @@
         </section>
 
         <section>
-          <h2>Sorok</h2>
+          <h2>Sorok és szólamok</h2>
           <ul id="staff-list" class="staff-list"></ul>
           <div class="row">
             <button type="button" id="add-staff">+ Sor a végére</button>
@@ -79,6 +79,11 @@
           </div>
           <label>Kulcs <select id="clef"></select></label>
           <label>Sor neve <input type="text" id="staff-name" /></label>
+          <div class="group wrap" id="voice-list" role="group" aria-label="Szólam"></div>
+          <div class="row">
+            <button type="button" id="add-voice">+ Szólam</button>
+            <button type="button" id="remove-voice">− Szólam</button>
+          </div>
         </section>
 
         <section>
@@ -111,6 +116,17 @@
             <button type="button" data-note="B">H</button>
             <button type="button" id="rest" title="Szünet (S)">Szünet</button>
           </div>
+          <div class="group wrap notes" role="group" aria-label="Akkord">
+            <span class="inline muted">Akkord:</span>
+            <button type="button" data-chord="C">+C</button>
+            <button type="button" data-chord="D">+D</button>
+            <button type="button" data-chord="E">+E</button>
+            <button type="button" data-chord="F">+F</button>
+            <button type="button" data-chord="G">+G</button>
+            <button type="button" data-chord="A">+A</button>
+            <button type="button" data-chord="B">+H</button>
+            <button type="button" id="chord-remove" title="Legfelső hang elvétele">− hang</button>
+          </div>
           <div class="group wrap">
             <button type="button" id="delete" title="Törlés (Backspace)">⌫ Törlés</button>
             <button type="button" id="undo" title="Visszavonás (Ctrl+Z)">↶ Vissza</button>
@@ -121,6 +137,60 @@
             <b>+ − 0</b> módosítójel, <b>↑↓</b> oktáv, <b>S</b> szünet, <b>← →</b> kurzor,
             <b>Backspace</b> törlés, <b>Ctrl+Z</b> vissza.
           </p>
+        </section>
+
+        <section>
+          <h2>Jelek az utolsó hangon</h2>
+          <div class="group wrap" role="group" aria-label="Előadási jelek">
+            <button type="button" data-articulation="staccato" title="Staccato">⋅</button>
+            <button type="button" data-articulation="accent" title="Ékezet">&gt;</button>
+            <button type="button" data-articulation="tenuto" title="Tenuto">–</button>
+            <button type="button" data-articulation="marcato" title="Erős ékezet">∧</button>
+            <button type="button" data-articulation="fermata" title="Korona">𝄐</button>
+          </div>
+          <div class="group wrap" role="group" aria-label="Kötések">
+            <button type="button" id="tie" title="Átkötés a következő azonos hanghoz">Átkötés</button>
+            <button type="button" data-slur="start" title="Kötőív kezdete">Ív kezd</button>
+            <button type="button" data-slur="stop" title="Kötőív vége">Ív vége</button>
+          </div>
+          <div class="group wrap" role="group" aria-label="Dinamika">
+            <button type="button" data-dynamic="pp">pp</button>
+            <button type="button" data-dynamic="p">p</button>
+            <button type="button" data-dynamic="mp">mp</button>
+            <button type="button" data-dynamic="mf">mf</button>
+            <button type="button" data-dynamic="f">f</button>
+            <button type="button" data-dynamic="ff">ff</button>
+          </div>
+          <div class="group wrap" role="group" aria-label="Villa és jelek">
+            <button type="button" data-wedge="crescendo" title="Crescendo kezdete">&lt;</button>
+            <button type="button" data-wedge="diminuendo" title="Decrescendo kezdete">&gt;</button>
+            <button type="button" data-wedge="stop" title="Villa vége">| vége</button>
+            <button type="button" data-marker="segno" title="Segno">𝄋</button>
+            <button type="button" data-marker="coda" title="Coda">𝄌</button>
+          </div>
+        </section>
+
+        <section>
+          <h2>Ütemvonal és váltás</h2>
+          <div class="group wrap" role="group" aria-label="Ütemvonal">
+            <button type="button" data-barline="normal" title="Ütemvonal">|</button>
+            <button type="button" data-barline="double" title="Kettős vonal">‖</button>
+            <button type="button" data-barline="final" title="Záróvonal">𝄂</button>
+            <button type="button" data-barline="repeat-start" title="Ismétlés kezdete">𝄆</button>
+            <button type="button" data-barline="repeat-end" title="Ismétlés vége">𝄇</button>
+          </div>
+          <label>Kulcsváltás ide
+            <span class="inline">
+              <select id="clef-change"></select>
+              <button type="button" id="add-clef-change">Beszúr</button>
+            </span>
+          </label>
+          <label>Hangnemváltás ide
+            <span class="inline">
+              <select id="key-change"></select>
+              <button type="button" id="add-key-change">Beszúr</button>
+            </span>
+          </label>
         </section>
       </aside>
 

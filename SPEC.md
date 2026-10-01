@@ -1,6 +1,6 @@
 # Sonora – specifikáció és döntésnapló
 
-> Állapot: **2a fázis (szerkesztő alapok) kész.** Kottát írni, menteni és megnyitni lehet.
+> Állapot: **2. fázis (szerkesztő) kész: 2a, 2b, 2c, 2d.** Kottát írni, jelekkel ellátni, menteni és megnyitni lehet.
 
 ## Cél
 Saját használatú kottaprogram (később akár Play Áruház). Fekete kotta → egy gombnyomással színes vagy üres (kifestős) kotta, transzponálás, nyomtatás. Meglévő (Finale) kották színessé tétele.
@@ -60,9 +60,9 @@ Színezés mindig a **megszólaló hang** szerint (transzponáló hangszernél i
 1. ✅ **Színező:** MusicXML betöltés → fekete/színes/üres nézet → transzponálás → nyomtatás/PDF
 2. **Szerkesztő:**
    - ✅ **2a** – új kotta, hang/szünet beírása és törlése, hangértékek, pont, #/b/feloldójel, oktáv, kulcs, hangnem, ütemmutató, tempó, sorok, undo/redo, MusicXML mentés és megnyitás
-   - **2b** – ütemvonalak, ismétlőjel, záróvonal, kulcs- és hangnemváltás a darab közben, oldalváltás
-   - **2c** – kötőív, átkötés, dinamika, korona, ékezet, staccato, coda/segno
-   - **2d** – akkordok, több szólam egy soron
+   - ✅ **2b** – ütemvonalak, ismétlőjel, záróvonal, kulcs- és hangnemváltás a darab közben
+   - ✅ **2c** – kötőív, átkötés, dinamika, villa, korona, ékezet, tenuto, staccato, coda/segno
+   - ✅ **2d** – akkordok, több szólam egy soron
 3. **Android** csomagolás
 4. *(talán)* OMR – PDF/PNG beolvasás
 
@@ -83,12 +83,24 @@ Színezés mindig a **megszólaló hang** szerint (transzponáló hangszernél i
 - [x] Sor beszúrása a végére vagy a kurzor helyére, sor törlése
 - [x] Mentés MusicXML-be és megnyitás
 
-## Ismert korlátok (2a)
+## Elkészült (2b, 2c, 2d fázis)
+- [x] Ütemvonalak: sima, kettős, záróvonal, ismétlés kezdete és vége
+- [x] Kulcsváltás és hangnemváltás a darab közben
+- [x] Átkötés (csak azonos magasságú szomszédos hangok közé), kötőív
+- [x] Előadási jelek: staccato, ékezet, tenuto, erős ékezet, korona
+- [x] Dinamika pp–ff, crescendo/decrescendo villa, segno, coda
+- [x] Akkordok: több hang egy kottafejen, alulról rendezve
+- [x] Több szólam egy soron (MusicXML `backup` jelöléssel)
+- [x] Minden új jel túléli a mentést és a visszatöltést
+
+## Ismert korlátok
 - A transzponálás **csak a képernyőn és nyomtatásban** hat; a mentett fájl az eredeti hangnemben marad.
 - Ütemvonalon átnyúló hang nincs: ha egy hang nem fér be, új ütemet kezd, az előző ütem rövidebb marad (átkötés = 2c).
 - A `.mxl` (tömörített) fájlt a szerkesztő nem nyitja meg, csak a sima `.musicxml`-t.
 - Beolvasáskor az akkordok további hangjai és az 1-től eltérő szólamok kimaradnak.
-- Egy sorban egy szólam, akkord nélkül (2d).
+- Az átkötés csak két egymás utáni, azonos magasságú hang közé tehető; ütemvonalon átnyúló hangot a program továbbra sem bont ketté.
+- A kötőív mindig az 1-es számot kapja, ezért egymásba ágyazott ívek nem működnek.
+- A szólamok ütemekre bontása szólamonként külön történik; ha az egyik szólam ütemei nincsenek tele, elcsúszhat a másiktól.
 
 ## Nyitott kérdések
 - [ ] Fotó: színes kotta és kifestős házi minta a tanártól
